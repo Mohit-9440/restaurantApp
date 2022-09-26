@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import NotFound from "../img/NotFound.svg";
 import { useStateValue } from "../context/StateProvider";
 import { actionType } from "../context/reducer";
+import { fetchCart } from "../utils/fetchLocalStorageData";
 
 const RowContainer = ({ flag, data, scrollValue }) => {
   const rowContainer = useRef();
@@ -27,6 +28,16 @@ const RowContainer = ({ flag, data, scrollValue }) => {
   useEffect(() => {
     addtocart();
   }, [items]);
+
+  const addItemQty = (item) => { 
+    setItems(cartItems.map(e => e.id===item.id ? {...e, qty: e.qty+1} : e));
+    fetchCart()
+  }
+
+  const addCartItem = (item) => { 
+    cartItems.find(e => e.id === item.id) ? addItemQty(item) :
+    setItems([...cartItems, item])
+  }
 
   return (
     <div
@@ -57,7 +68,7 @@ const RowContainer = ({ flag, data, scrollValue }) => {
               <motion.div
                 whileTap={{ scale: 0.75 }}
                 className="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center cursor-pointer hover:shadow-md -mt-8"
-                onClick={() => setItems([...cartItems, item])}
+                onClick={() => addCartItem(item)} //setItems([...cartItems, item]
               >
                 <MdShoppingBasket className="text-white" />
               </motion.div>
@@ -80,7 +91,7 @@ const RowContainer = ({ flag, data, scrollValue }) => {
         ))
       ) : (
         <div className="w-full flex flex-col items-center justify-center">
-          <img src={NotFound} className="h-340" alt='not-found'/>
+          <img src={NotFound} className="h-340"n alt='' />
           <p className="text-xl text-headingColor font-semibold my-2">
             Items Not Available
           </p>

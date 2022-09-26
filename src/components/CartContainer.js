@@ -6,10 +6,12 @@ import { motion } from "framer-motion";
 import { useStateValue } from "../context/StateProvider";
 import { actionType } from "../context/reducer";
 import EmptyCart from "../img/emptyCart.svg";
-import CartItem from "./CartItem";
+import CartItem from "./CartItem.js";
+import { fetchCart } from "../utils/fetchLocalStorageData";
 
 const CartContainer = () => {
   const [{ cartShow, cartItems, user }, dispatch] = useStateValue();
+  const [cartUpdatedItems, setCartUpdatedItems] = useState(cartItems);
   const [flag, setFlag] = useState(1);
   const [tot, setTot] = useState(0);
 
@@ -25,8 +27,10 @@ const CartContainer = () => {
       return accumulator + item.qty * item.price;
     }, 0);
     setTot(totalPrice);
+    setCartUpdatedItems(cartItems)
+    // console.log('cartItems', cartItems)
     console.log(tot);
-  }, [tot, flag]);
+  }, [tot, flag, cartItems]);
 
   const clearCart = () => {
     dispatch({
@@ -36,7 +40,7 @@ const CartContainer = () => {
 
     localStorage.setItem("cartItems", JSON.stringify([]));
   };
-
+// console.log(cartUpdatedItems)
   return (
     <motion.div
       initial={{ opacity: 0, x: 200 }}
@@ -60,14 +64,14 @@ const CartContainer = () => {
       </div>
 
       {/* bottom section */}
-      {cartItems && cartItems.length > 0 ? (
+      {cartUpdatedItems && cartUpdatedItems.length > 0 ? (
         <div className="w-full h-full bg-cartBg rounded-t-[2rem] flex flex-col">
           {/* cart Items section */}
           <div className="w-full h-340 md:h-42 px-6 py-10 flex flex-col gap-3 overflow-y-scroll scrollbar-none">
             {/* cart Item */}
-            {cartItems &&
-              cartItems.length > 0 &&
-              cartItems.map((item) => (
+            {cartUpdatedItems &&
+                cartUpdatedItems.length > 0 &&
+                cartUpdatedItems.map((item) => (
                 <CartItem
                   key={item.id}
                   item={item}
