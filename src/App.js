@@ -13,7 +13,7 @@ const App = () => {
     await getAllFoodItems().then(data => {
       dispatch({
         type : actionType.SET_FOOD_ITEMS,
-        foodItems : data
+        foodItems : data,
       })
     });
   };
@@ -21,6 +21,7 @@ const App = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
   return (
     <AnimatePresence exitBeforeEnter>
       <div className='w-screen h-auto flex flex-col bg-primary'>

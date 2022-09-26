@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/img-redundant-alt */
+
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {MdFastfood, MdCloudUpload, MdDelete, MdFoodBank, MdAttachMoney} from 'react-icons/md';
@@ -35,9 +35,13 @@ const CreateContainer = () => {
     const storageRef = ref(storage, `Images/${Date.now()}-${imageFile.name}`)
     const uploadTask = uploadBytesResumable(storageRef, imageFile);
 
-    uploadTask.on('state_changed', (snapshot) => {
-      const uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-    }, (error) => {
+    uploadTask.on(
+      'state_changed', 
+      (snapshot) => {
+      const uploadProgress = 
+        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+    }, 
+    (error) => {
       console.log(error);
       setFields(true);
       setMsg('Error while uploading : Try Again 🙇‍♂️');
@@ -46,7 +50,8 @@ const CreateContainer = () => {
         setFields(false)
         setIsLoading(false)
       }, 4000);
-    }, () => {
+    },
+     () => {
       getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
         setImageAsset(downloadURL);
         setIsLoading(false);
@@ -102,11 +107,11 @@ const CreateContainer = () => {
         setIsLoading(false);
         setFields(true);
         setMsg("Data uploaded successfully 😊");
-        clearData();
         setAlertStatus("success");
         setTimeout(() => {
           setFields(false);
         }, 4000);
+        clearData();
       }
     } catch (error) {
       console.log(error);
@@ -123,10 +128,10 @@ const CreateContainer = () => {
 
   const clearData = () => {
     setTitle("");
-    setCategory("Select Category");
     setImageAsset(null);
     setCalories("");
     setPrice("");
+    setCategory("Select Category");
   };
 
   const fetchData = async () => {
@@ -134,7 +139,7 @@ const CreateContainer = () => {
       dispatch({
         type : actionType.SET_FOOD_ITEMS,
         foodItems : data,
-      })
+      });
     });
   };
 
